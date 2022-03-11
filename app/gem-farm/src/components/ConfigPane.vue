@@ -1,17 +1,27 @@
 <template>
   <div class="flex flex-col">
-    <div class="nes-select flex-1">
-      <p class="text-base">Select wallet</p>
-      <select required id="cluster" v-model="chosenCluster">
+    <div class="f-wull mb-4">
+      <p class="label text-base mb-2">Select network</p>
+      <select
+        class="select text-base leading-4"
+        required
+        id="cluster"
+        v-model="chosenCluster"
+      >
         <option :value="Cluster.Mainnet">Mainnet</option>
         <option :value="Cluster.Devnet">Devnet</option>
         <option :value="Cluster.Testnet">Testnet</option>
         <option :value="Cluster.Localnet">Localnet</option>
       </select>
     </div>
-    <div class="nes-select is-dark flex-1">
-      <p class="title">Select wallet</p>
-      <select required id="wallet" v-model="chosenWallet">
+    <div class="f-wull">
+      <p class="label text-base mb-2">Select wallet</p>
+      <select
+        class="select text-base leading-4"
+        required
+        id="wallet"
+        v-model="chosenWallet"
+      >
         <option class="text-gray-500" :value="null">Choose wallet..</option>
         <option :value="WalletName.Phantom">Phantom</option>
         <option :value="WalletName.Sollet">Sollet</option>
@@ -64,7 +74,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.title {
+.label {
   color: #a1a1a1;
+}
+
+.select {
+  width: 100%;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  padding: 20px 16px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #fff;
 }
 </style>

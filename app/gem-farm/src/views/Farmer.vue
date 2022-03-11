@@ -63,12 +63,76 @@
       </ul>
     </section>
 
-    <section v-if="farmerAcc" class="flex mb-5">
-      <div class="flex-1 mr-5"></div>
+    <section class="flex flex-col mb-8">
+      <h3 class="text-lg rewardTitle mb-5">Reward A</h3>
+
+      <div class="reward py-6 px-4 rounded text-white">
+        <div class="reward__item flex flex-row justify-between mb-5 pb-5">
+          <span>Accrued reward:</span>
+          <span v-if="farmerAcc">{{ farmerAcc.rewardA.accruedReward }}</span>
+        </div>
+
+        <div class="reward__item flex flex-row justify-between mb-5 pb-5">
+          <span>Paid out reward:</span>
+          <span v-if="farmerAcc">{{ farmerAcc.rewardA.paidOutReward }}</span>
+        </div>
+
+        <div v-if="farmAcc && parseRewardType(farmAcc.rewardA) === 'variable'">
+          <span class="w-full text-white">Variable reward:</span>
+          <span v-if="farmerAcc" class="reward__item mb-5 pb-5">
+            Last recorded accrued reward per gem:
+            {{
+              numeral(
+                farmerAcc.rewardA.variableRate
+                  .lastRecordedAccruedRewardPerRarityPoint.n /
+                  10 ** 15
+              ).format('0,0.0')
+            }}
+          </span>
+        </div>
+
+        <ul v-else>
+          <li class="reward__fixed mb-5 uppercase w-full text-white">
+            Fixed reward:
+          </li>
+          <li class="reward__item flex flex-row justify-between mb-5 pb-5">
+            <span>Staking begins:</span>
+            <span v-if="farmerAcc">{{
+              parseDate(farmerAcc.rewardA.fixedRate.beginStakingTs)
+            }}</span>
+          </li>
+          <li class="reward__item flex flex-row justify-between mb-5 pb-5">
+            <span>Schedule begins:</span>
+            <span v-if="farmerAcc">{{
+              parseDate(farmerAcc.rewardA.fixedRate.beginScheduleTs)
+            }}</span>
+          </li>
+          <li class="reward__item flex flex-row justify-between mb-5 pb-5">
+            <span>Last updated:</span>
+            <span v-if="farmerAcc">{{
+              parseDate(farmerAcc.rewardA.fixedRate.lastUpdatedTs)
+            }}</span>
+          </li>
+          <li class="reward__item flex flex-row justify-between mb-5 pb-5">
+            <span>Promised duration:</span>
+            <span v-if="farmerAcc">{{
+              farmerAcc.rewardA.fixedRate.promisedDuration
+            }}</span>
+          </li>
+          <li class="mb-5">Promised schedule:</li>
+          <li>
+            <FixedScheduleDisplay
+              :key="farmAcc?.rewardA"
+              class="ml-5"
+              :schedule="farmerAcc?.rewardA.fixedRate.promisedSchedule"
+            />
+          </li>
+        </ul>
+      </div>
     </section>
 
     <button
-      class="w-full text-base text-white refresh rounded py-5"
+      class="block w-full text-base text-white refresh rounded py-5 md:max-w-xs md:m-auto"
       @click="refreshFarmer"
     >
       Refresh account
@@ -77,37 +141,42 @@
 
   <footer class="footer py-8">
     <div v-if="farmerAcc" class="container mx-auto">
-      <button
-        v-if="farmerState === 'staked' && selectedNFTs.length > 0"
-        class="nes-btn is-primary mr-5"
-        @click="addGems"
-      >
-        Add Gems (resets staking)
-      </button>
-      <button
-        v-if="farmerState === 'unstaked'"
-        class="nes-btn is-success mr-5"
-        @click="beginStaking"
-      >
-        Begin staking
-      </button>
-      <button
-        v-if="farmerState === 'staked'"
-        class="nes-btn is-error mr-5"
-        @click="endStaking"
-      >
-        End staking
-      </button>
-      <button
-        v-if="farmerState === 'pendingCooldown'"
-        class="nes-btn is-error mr-5"
-        @click="endStaking"
-      >
-        End cooldown
-      </button>
-      <button class="nes-btn is-warning" @click="claim">
-        Claim {{ availableA }} A / {{ availableB }} B
-      </button>
+      <div class="flex flex-row gap-4">
+        <button
+          v-if="farmerState === 'staked' && selectedNFTs.length > 0"
+          class="is-primary w-6/12 rounded max-w-xs py-5 text-base font-medium"
+          @click="addGems"
+        >
+          Add Gems (resets staking)
+        </button>
+        <button
+          v-if="farmerState === 'unstaked'"
+          class="is-success w-6/12 rounded max-w-xs py-5 text-base font-medium staking"
+          @click="beginStaking"
+        >
+          Begin staking
+        </button>
+        <button
+          v-if="farmerState === 'staked'"
+          class="is-error w-6/12 rounded max-w-xs py-5 text-base font-medium staking"
+          @click="endStaking"
+        >
+          End staking
+        </button>
+        <button
+          v-if="farmerState === 'pendingCooldown'"
+          class="is-error w-6/12 rounded max-w-xs py-5 text-base font-medium staking"
+          @click="endStaking"
+        >
+          End cooldown
+        </button>
+        <button
+          class="is-warning w-6/12 rounded max-w-xs py-5 text-base font-medium claim"
+          @click="claim"
+        >
+          Claim {{ availableA }} A
+        </button>
+      </div>
     </div>
     <div v-else class="container mx-auto">
       <div v-if="wallet">
@@ -146,6 +215,7 @@ import useCluster from '@/composables/cluster';
 import ConfigPane from '@/components/ConfigPane.vue';
 import FarmerRewardDisplay from '@/components/gem-farm/FarmerRewardDisplay.vue';
 import Vault from '@/components/gem-bank/Vault.vue';
+import numeral from 'numeral';
 
 export default defineComponent({
   components: { Vault, FarmerRewardDisplay, ConfigPane },
@@ -160,7 +230,6 @@ export default defineComponent({
 
     //needed in case we switch in from another window
     onMounted(async () => {
-      console.log('getConnection :>> ', getConnection());
       await freshStart();
     });
 
@@ -308,6 +377,11 @@ export default defineComponent({
       return Object.keys(farmer.state)[0];
     };
 
+    const parseRewardType = (reward: any): string => {
+      //returns "variable" or "fixed"
+      return Object.keys(reward.rewardType)[0];
+    };
+
     const refreshFarmer = async () => {
       await gf.refreshFarmerWallet(
         new PublicKey(farm!),
@@ -337,9 +411,13 @@ export default defineComponent({
       addGems,
       parseFarmerState,
       parseDate,
+      parseRewardType,
+      numeral,
     };
   },
 });
+
+// 8EV1K3kWmq2hbRtQfnBg3wbvELEorJajbyJhRGwVptwj
 </script>
 
 <style scoped>
@@ -377,6 +455,10 @@ export default defineComponent({
   border: 1px solid #ffffff;
 }
 
+.rewardTitle {
+  color: #909090;
+}
+
 .farmerLabel {
   color: #999999;
 }
@@ -390,5 +472,32 @@ export default defineComponent({
 .farmerBtn {
   background: linear-gradient(90deg, #fbc7d4 0%, #9796f0 100%), #4aaf47;
   border-radius: 4px;
+}
+
+.staking {
+  color: #141414;
+  background: linear-gradient(192.54deg, #9be15d 2.01%, #00e3ae 97.9%),
+    linear-gradient(90deg, #fbc7d4 0%, #9796f0 100%), #4aaf47;
+}
+.claim {
+  color: #141414;
+  background: linear-gradient(90deg, #fbc7d4 0%, #9796f0 100%), #4aaf47;
+}
+
+.reward {
+  background: linear-gradient(
+      90deg,
+      rgba(251, 199, 212, 0.04) 0%,
+      rgba(151, 150, 240, 0.04) 100%
+    ),
+    #191819;
+}
+
+.reward__fixed {
+  color: #909090;
+}
+
+.reward__item {
+  border-bottom: 1px solid #141414;
 }
 </style>

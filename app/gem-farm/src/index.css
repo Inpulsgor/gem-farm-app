@@ -3,6 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+	cursor: default;
+}
+
 body {
 	background-color: #141414;
 }
