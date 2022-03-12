@@ -418,8 +418,11 @@ export default defineComponent({
 
 <style scoped>
 .footer {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
   border-top: 1px solid #404040;
-  background-color: transparent;
+  background-color: #000;
 }
 
 .item {
