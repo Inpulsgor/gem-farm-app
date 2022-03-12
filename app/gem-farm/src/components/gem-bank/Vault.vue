@@ -25,7 +25,7 @@
     />
 
     <!--mid-->
-    <div class="flex flex-col px-5 mt-9 justify-center">
+    <div class="flex flex-col px-5 mt-9 md:mt-0 justify-center">
       <ArrowButton
         :disabled="vaultLocked"
         class="my-2"

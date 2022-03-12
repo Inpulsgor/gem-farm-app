@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col">
-    <div class="f-wull mb-4">
+  <div class="flex flex-col md:flex-row">
+    <div class="w-full md:max-w-xs mb-4 md:mb-0 md:mr-4">
       <p class="label text-base mb-2">Select network</p>
       <select
         class="select text-base leading-4 btnHeight"
@@ -14,7 +14,7 @@
         <option :value="Cluster.Localnet">Localnet</option>
       </select>
     </div>
-    <div class="f-wull">
+    <div class="w-full md:max-w-xs">
       <p class="label text-base mb-2">Select wallet</p>
       <select
         class="select text-base leading-4 btnHeight"
