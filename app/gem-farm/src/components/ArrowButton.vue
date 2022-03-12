@@ -1,10 +1,10 @@
 <template>
   <button :disabled="disabled">
     <img
-      src="../assets/play.png"
+      src="../assets/left.svg"
       alt="right"
-      :width="60"
-      :height="60"
+      :width="16"
+      :height="32"
       :class="{ left: left, disabled: disabled }"
     />
   </button>

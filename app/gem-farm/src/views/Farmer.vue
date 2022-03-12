@@ -3,7 +3,6 @@
     <section v-if="farmerAcc">
       <Vault
         :key="farmerAcc"
-        class="mb-10"
         :vault="farmerAcc.vault.toBase58()"
         @selected-wallet-nft="handleNewSelectedNFT"
       >
@@ -27,17 +26,17 @@
         </li>
         <li class="item flex flex-col md:flex-row mb-5 pb-5">
           <span class="item__label text-sm mb-4">Your identity:</span>
-          <span v-if="farmerAcc" class="text-white leading-4">{{
+          <span v-if="farmerAcc" class="truncate text-white leading-4">{{
             farmerAcc.identity.toBase58()
           }}</span>
           <span v-else class="text-white leading-4">{{ '--' }}</span>
         </li>
         <li class="item flex flex-col md:flex-row mb-5 pb-5">
           <span class="item__label text-sm mb-4">Associated vault:</span>
-          <span v-if="farmerAcc" class="text-white leading-4">{{
+          <span v-if="farmerAcc" class="truncate text-white leading-4">{{
             farmerAcc.vault.toBase58()
           }}</span>
-          <span class="text-white leading-4">{{ '--' }}</span>
+          <span v-else class="text-white leading-4">{{ '--' }}</span>
         </li>
         <li class="item flex flex-row justify-between mb-5 pb-5">
           <span class="item__label text-sm">DiamondHands staked</span>
@@ -131,12 +130,12 @@
       </div>
     </section>
 
-    <button
-      class="block w-full text-base text-white refresh rounded py-5 md:max-w-xs md:m-auto"
-      @click="refreshFarmer"
-    >
-      Refresh account
-    </button>
+    <RefreshButton
+      v-if="farmerAcc"
+      :farm="farm"
+      :farmer="farmer"
+      @refresh-farmer="handleRefreshFarmer"
+    />
   </main>
 
   <footer class="footer py-8">
@@ -144,34 +143,34 @@
       <div class="flex flex-row gap-4">
         <button
           v-if="farmerState === 'staked' && selectedNFTs.length > 0"
-          class="is-primary w-6/12 rounded max-w-xs py-5 text-base font-medium"
+          class="is-primary w-6/12 rounded max-w-xs py-4 text-base font-medium btnHeight"
           @click="addGems"
         >
           Add Gems (resets staking)
         </button>
         <button
           v-if="farmerState === 'unstaked'"
-          class="is-success w-6/12 rounded max-w-xs py-5 text-base font-medium staking"
+          class="is-success w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
           @click="beginStaking"
         >
           Begin staking
         </button>
         <button
           v-if="farmerState === 'staked'"
-          class="is-error w-6/12 rounded max-w-xs py-5 text-base font-medium staking"
+          class="is-error w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
           @click="endStaking"
         >
           End staking
         </button>
         <button
           v-if="farmerState === 'pendingCooldown'"
-          class="is-error w-6/12 rounded max-w-xs py-5 text-base font-medium staking"
+          class="is-error w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
           @click="endStaking"
         >
           End cooldown
         </button>
         <button
-          class="is-warning w-6/12 rounded max-w-xs py-5 text-base font-medium claim"
+          class="is-warning w-6/12 rounded max-w-xs py-4 text-base font-medium claim btnHeight"
           @click="claim"
         >
           Claim {{ availableA }} A
@@ -184,13 +183,13 @@
           <label class="mb-4 farmerLabel" for="farm">Enter farm address</label>
           <input
             id="farm"
-            class="w-full farmerInput rounded text-xs text-white"
+            class="w-full farmerInput rounded text-xs text-white btnHeight"
             v-model="farm"
           />
         </div>
 
         <button
-          class="text-base font-medium w-full text-black py-4 farmerBtn"
+          class="text-base font-medium w-full text-black py-4 farmerBtn btnHeight"
           @click="initFarmer"
         >
           New Farmer
@@ -213,12 +212,14 @@ import { INFT } from '@/common/web3/NFTget';
 import useWallet from '@/composables/wallet';
 import useCluster from '@/composables/cluster';
 import ConfigPane from '@/components/ConfigPane.vue';
+import RefreshButton from '@/components/RefreshButton.vue';
+import Footer from '@/components/Footer.vue';
 import FarmerRewardDisplay from '@/components/gem-farm/FarmerRewardDisplay.vue';
 import Vault from '@/components/gem-bank/Vault.vue';
 import numeral from 'numeral';
 
 export default defineComponent({
-  components: { Vault, FarmerRewardDisplay, ConfigPane },
+  components: { Vault, FarmerRewardDisplay, RefreshButton, ConfigPane, Footer },
   setup() {
     const { wallet, getWallet, isConnected } = useWallet();
     const { cluster, getConnection } = useCluster();
@@ -329,10 +330,6 @@ export default defineComponent({
       await fetchFarmer();
     };
 
-    const handleRefreshFarmer = async () => {
-      await fetchFarmer();
-    };
-
     // --------------------------------------- adding extra gem
     const selectedNFTs = ref<INFT[]>([]);
 
@@ -382,13 +379,8 @@ export default defineComponent({
       return Object.keys(reward.rewardType)[0];
     };
 
-    const refreshFarmer = async () => {
-      await gf.refreshFarmerWallet(
-        new PublicKey(farm!),
-        new PublicKey(farmerAcc!)
-      );
-
-      await handleRefreshFarmer();
+    const handleRefreshFarmer = async () => {
+      await fetchFarmer();
     };
 
     return {
@@ -405,7 +397,6 @@ export default defineComponent({
       endStaking,
       claim,
       handleRefreshFarmer,
-      refreshFarmer,
       selectedNFTs,
       handleNewSelectedNFT,
       addGems,
@@ -438,15 +429,14 @@ export default defineComponent({
   color: #fff;
 }
 
-.shrink {
-  width: 200px;
-  display: inline-block;
+.truncate {
+  max-width: 450px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.shrink:hover {
+.truncate:hover {
   white-space: unset;
   text-overflow: unset;
 }
@@ -499,5 +489,9 @@ export default defineComponent({
 
 .reward__item {
   border-bottom: 1px solid #141414;
+}
+
+.btnHeight {
+  max-height: 56px;
 }
 </style>

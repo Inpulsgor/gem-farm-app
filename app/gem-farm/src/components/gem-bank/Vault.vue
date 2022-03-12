@@ -15,7 +15,7 @@
   </div>
 
   <!--wallet + vault view-->
-  <div class="flex items-stretch">
+  <div class="flex items-stretch mb-12">
     <!--left-->
     <NFTGrid
       title="Your wallet"
@@ -25,7 +25,7 @@
     />
 
     <!--mid-->
-    <div class="m-2 flex flex-col">
+    <div class="flex flex-col px-5 mt-9 justify-center">
       <ArrowButton
         :disabled="vaultLocked"
         class="my-2"

@@ -1,14 +1,16 @@
 <template>
-  <div class="nes-container with-title">
-    <p class="title">{{ title }}</p>
-    <slot />
-    <div class="flex flex-wrap">
-      <NFTCard
-        v-for="nft in nfts"
-        :key="nft"
-        :nft="nft"
-        @selected="handleSelected"
-      />
+  <div>
+    <p class="title text-sm mb-4">{{ title }}</p>
+    <div class="tokens p-2 rounded">
+      <slot />
+      <div class="flex flex-wrap">
+        <NFTCard
+          v-for="nft in nfts"
+          :key="nft"
+          :nft="nft"
+          @selected="handleSelected"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -35,4 +37,18 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.title {
+  color: #d0d0d0;
+}
+
+.tokens {
+  min-height: 200px;
+  background: linear-gradient(
+      90deg,
+      rgba(251, 199, 212, 0.04) 0%,
+      rgba(151, 150, 240, 0.04) 100%
+    ),
+    #191819;
+}
+</style>

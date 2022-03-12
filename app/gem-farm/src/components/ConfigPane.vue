@@ -3,7 +3,7 @@
     <div class="f-wull mb-4">
       <p class="label text-base mb-2">Select network</p>
       <select
-        class="select text-base leading-4"
+        class="select text-base leading-4 btnHeight"
         required
         id="cluster"
         v-model="chosenCluster"
@@ -17,7 +17,7 @@
     <div class="f-wull">
       <p class="label text-base mb-2">Select wallet</p>
       <select
-        class="select text-base leading-4"
+        class="select text-base leading-4 btnHeight"
         required
         id="wallet"
         v-model="chosenWallet"
@@ -82,9 +82,24 @@ export default defineComponent({
   width: 100%;
   border: 1px solid #404040;
   border-radius: 4px;
-  padding: 20px 16px;
+  padding: 16px;
   cursor: pointer;
   background-color: transparent;
   color: #fff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('../assets/arr.svg');
+  background-repeat: no-repeat;
+  background-position-x: 96%;
+  background-position-y: 50%;
+}
+
+.select::after {
+  content: '';
+  padding-right: 20px;
+}
+
+.btnHeight {
+  max-height: 56px;
 }
 </style>
