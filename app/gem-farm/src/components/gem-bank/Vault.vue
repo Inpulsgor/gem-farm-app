@@ -43,7 +43,7 @@
     <NFTGrid
       v-if="bank && vault"
       title="Your vault"
-      class="flex-1"
+      class="flex-1 relative"
       :nfts="desiredVaultNFTs"
       @selected="handleVaultSelected"
     >
