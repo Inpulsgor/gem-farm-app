@@ -1,21 +1,23 @@
 <template>
   <!--control buttons-->
-  <div class="mb-10 flex justify-center">
+  <div
+    v-if="
+      (toWalletNFTs && toWalletNFTs.length) ||
+      (toVaultNFTs && toVaultNFTs.length)
+    "
+    class="mb-10 flex justify-center"
+  >
     <button
-      v-if="
-        (toWalletNFTs && toWalletNFTs.length) ||
-        (toVaultNFTs && toVaultNFTs.length)
-      "
-      class="nes-btn is-primary mr-5"
+      class="block w-full text-base text-white refresh rounded py-4 btnHeight md:max-w-xs md:m-auto mr-5"
       @click="moveNFTsOnChain"
     >
-      Move Gems!
+      Move NFTs to Vault
     </button>
     <slot />
   </div>
 
   <!--wallet + vault view-->
-  <div class="flex items-stretch mb-12">
+  <div class="flex md:flex-col items-stretch mb-12">
     <!--left-->
     <NFTGrid
       title="Your wallet"
@@ -43,15 +45,15 @@
     <NFTGrid
       v-if="bank && vault"
       title="Your vault"
-      class="flex-1 relative"
+      class="flex-1"
       :nfts="desiredVaultNFTs"
       @selected="handleVaultSelected"
     >
       <div
         v-if="vaultLocked"
-        class="locked flex-col justify-center items-center align-center"
+        class="locked flex flex-col justify-center items-center align-center rounded-lg"
       >
-        <p class="mt-10">This vault is locked!</p>
+        <p class="">This vault is locked!</p>
       </div>
     </NFTGrid>
   </div>
@@ -312,5 +314,12 @@ export default defineComponent({
   left: 0;
   opacity: 0.7;
   z-index: 10;
+}
+
+.btnHeight {
+  max-height: 56px;
+  color: #141414;
+  background: linear-gradient(192.54deg, #9be15d 2.01%, #00e3ae 97.9%),
+    linear-gradient(90deg, #fbc7d4 0%, #9796f0 100%), #4aaf47;
 }
 </style>

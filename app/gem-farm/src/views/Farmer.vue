@@ -1,208 +1,265 @@
 <template>
-  <main class="container mx-auto pt-8 pb-9 flex md:gap-x-20">
-    <div class="flex-1">
-      <section v-if="farmerAcc">
-        <Vault
-          :key="farmerAcc"
-          :vault="farmerAcc.vault.toBase58()"
-          @selected-wallet-nft="handleNewSelectedNFT"
-        >
-        </Vault>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-medium text-white mb-8">
-          Your Stacking Account
-        </h2>
-
-        <ul class="flex flex-col mb-12">
-          <li class="item flex flex-row justify-between mb-5 pb-5">
-            <span class="item__label text-sm">State:</span>
-            <span v-if="farmerAcc" class="item__value text-base text-white">{{
-              parseFarmerState(farmerAcc)
-            }}</span>
-            <span v-else class="item__value text-base text-white">{{
-              '--'
-            }}</span>
-          </li>
-          <li class="item flex flex-col md:flex-row mb-5 pb-5">
-            <span class="item__label text-sm mb-4">Your identity:</span>
-            <span v-if="farmerAcc" class="truncate text-white leading-4">{{
-              farmerAcc.identity.toBase58()
-            }}</span>
-            <span v-else class="text-white leading-4">{{ '--' }}</span>
-          </li>
-          <li class="item flex flex-col md:flex-row mb-5 pb-5">
-            <span class="item__label text-sm mb-4">Associated vault:</span>
-            <span v-if="farmerAcc" class="truncate text-white leading-4">{{
-              farmerAcc.vault.toBase58()
-            }}</span>
-            <span v-else class="text-white leading-4">{{ '--' }}</span>
-          </li>
-          <li class="item flex flex-row justify-between mb-5 pb-5">
-            <span class="item__label text-sm">DiamondHands staked</span>
-            <span v-if="farmerAcc" class="text-base text-white">{{
-              farmerAcc.gemsStaked
-            }}</span>
-            <span v-else class="text-base text-white">{{ '--' }}</span>
-          </li>
-          <li class="item flex flex-row justify-between mb-5 pb-5">
-            <span class="item__label text-sm">Minimum staking ends</span>
-            <span v-if="farmerAcc" class="text-base text-white">{{
-              parseDate(farmerAcc.minStakingEndsTs)
-            }}</span>
-            <span v-else class="text-base text-white">{{ '--' }}</span>
-          </li>
-          <li class="flex flex-row justify-between">
-            <span class="item__label text-sm">Cooldown ends</span>
-            <span v-if="farmerAcc" class="text-base text-white">
-              {{ parseDate(farmerAcc.cooldownEndsTs) }}</span
-            >
-            <span v-else class="text-base text-white"> {{ '--' }}</span>
-          </li>
-        </ul>
-      </section>
-
-      <section class="flex flex-col mb-8">
-        <h3 class="text-lg rewardTitle mb-5">Reward A</h3>
-
-        <div class="reward py-6 px-4 rounded text-white">
-          <div class="reward__item flex flex-row justify-between mb-5 pb-5">
-            <span>Accrued reward:</span>
-            <span v-if="farmerAcc">{{ farmerAcc.rewardA.accruedReward }}</span>
-          </div>
-
-          <div class="reward__item flex flex-row justify-between mb-5 pb-5">
-            <span>Paid out reward:</span>
-            <span v-if="farmerAcc">{{ farmerAcc.rewardA.paidOutReward }}</span>
-          </div>
-
-          <div
-            v-if="farmAcc && parseRewardType(farmAcc.rewardA) === 'variable'"
+  <main>
+    <div
+      class="container mx-auto pt-8 pb-9 px-4 md:px-0 flex flex-col-reverse md:flex-row md:gap-x-20"
+    >
+      <div class="flex-1">
+        <section v-if="farmerAcc">
+          <Vault
+            :key="farmerAcc"
+            :vault="farmerAcc.vault.toBase58()"
+            @selected-wallet-nft="handleNewSelectedNFT"
           >
-            <span class="w-full text-white">Variable reward:</span>
-            <span v-if="farmerAcc" class="reward__item mb-5 pb-5">
-              Last recorded accrued reward per gem:
-              {{
-                numeral(
-                  farmerAcc.rewardA.variableRate
-                    .lastRecordedAccruedRewardPerRarityPoint.n /
-                    10 ** 15
-                ).format('0,0.0')
-              }}
-            </span>
-          </div>
+          </Vault>
+        </section>
 
-          <ul v-else>
-            <li class="reward__fixed mb-5 uppercase w-full text-white">
-              Fixed reward:
-            </li>
-            <li class="reward__item flex flex-row justify-between mb-5 pb-5">
-              <span>Staking begins:</span>
-              <span v-if="farmerAcc">{{
-                parseDate(farmerAcc.rewardA.fixedRate.beginStakingTs)
+        <section>
+          <h2 class="text-2xl font-medium text-white mb-8">
+            Your Stacking Account
+          </h2>
+
+          <ul class="flex flex-col mb-12">
+            <li
+              class="item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+            >
+              <span class="item__label text-sm">State:</span>
+              <span v-if="farmerAcc" class="item__value text-base text-white">{{
+                parseFarmerState(farmerAcc)
+              }}</span>
+              <span v-else class="item__value text-base text-white">{{
+                '--'
               }}</span>
             </li>
-            <li class="reward__item flex flex-row justify-between mb-5 pb-5">
-              <span>Schedule begins:</span>
-              <span v-if="farmerAcc">{{
-                parseDate(farmerAcc.rewardA.fixedRate.beginScheduleTs)
+            <li class="item flex flex-col md:flex-row md:gap-4 mb-5 pb-5">
+              <span class="item__label text-sm mb-4">Your identity:</span>
+              <span v-if="farmerAcc" class="truncate text-white leading-4">{{
+                farmerAcc.identity.toBase58()
               }}</span>
+              <span v-else class="text-white leading-4">{{ '--' }}</span>
             </li>
-            <li class="reward__item flex flex-row justify-between mb-5 pb-5">
-              <span>Last updated:</span>
-              <span v-if="farmerAcc">{{
-                parseDate(farmerAcc.rewardA.fixedRate.lastUpdatedTs)
+            <li class="item flex flex-col md:flex-row md:gap-4 mb-5 pb-5">
+              <span class="item__label text-sm mb-4">Associated vault:</span>
+              <span v-if="farmerAcc" class="truncate text-white leading-4">{{
+                farmerAcc.vault.toBase58()
               }}</span>
+              <span v-else class="text-white leading-4">{{ '--' }}</span>
             </li>
-            <li class="reward__item flex flex-row justify-between mb-5 pb-5">
-              <span>Promised duration:</span>
-              <span v-if="farmerAcc">{{
-                farmerAcc.rewardA.fixedRate.promisedDuration
+            <li
+              class="item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+            >
+              <span class="item__label text-sm">DiamondHands staked</span>
+              <span v-if="farmerAcc" class="text-base text-white">{{
+                farmerAcc.gemsStaked
               }}</span>
+              <span v-else class="text-base text-white">{{ '--' }}</span>
             </li>
-            <li class="mb-5">Promised schedule:</li>
-            <li>
-              <FixedScheduleDisplay
-                :key="farmAcc?.rewardA"
-                class="ml-5"
-                :schedule="farmerAcc?.rewardA.fixedRate.promisedSchedule"
-              />
+            <li
+              class="item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+            >
+              <span class="item__label text-sm">Minimum staking ends</span>
+              <span v-if="farmerAcc" class="text-base text-white">{{
+                parseDate(farmerAcc.minStakingEndsTs)
+              }}</span>
+              <span v-else class="text-base text-white">{{ '--' }}</span>
+            </li>
+            <li class="flex flex-row justify-between md:justify-start md:gap-4">
+              <span class="item__label text-sm">Cooldown ends</span>
+              <span v-if="farmerAcc" class="text-base text-white">
+                {{ parseDate(farmerAcc.cooldownEndsTs) }}</span
+              >
+              <span v-else class="text-base text-white"> {{ '--' }}</span>
             </li>
           </ul>
-        </div>
-      </section>
+        </section>
 
-      <RefreshButton
-        v-if="farmerAcc"
-        :farm="farm"
-        :farmer="farmer"
-        @refresh-farmer="handleRefreshFarmer"
-      />
+        <section class="flex flex-col mb-8">
+          <h3 class="text-lg rewardTitle mb-5">Reward A</h3>
+
+          <div class="reward py-6 px-4 rounded text-white">
+            <div
+              class="reward__item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+            >
+              <span class="reward__label">Accrued reward:</span>
+              <span v-if="farmerAcc">{{
+                farmerAcc.rewardA.accruedReward
+              }}</span>
+              <span v-else>{{ '--' }}</span>
+            </div>
+
+            <div
+              class="reward__item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+            >
+              <span class="reward__label">Paid out reward:</span>
+              <span v-if="farmerAcc">{{
+                farmerAcc.rewardA.paidOutReward
+              }}</span>
+              <span v-else>{{ '--' }}</span>
+            </div>
+
+            <div
+              v-if="farmAcc && parseRewardType(farmAcc.rewardA) === 'variable'"
+            >
+              <span class="w-full text-white">Variable reward:</span>
+              <span v-if="farmerAcc" class="reward__item mb-5 pb-5">
+                Last recorded accrued reward per gem:
+                {{
+                  numeral(
+                    farmerAcc.rewardA.variableRate
+                      .lastRecordedAccruedRewardPerRarityPoint.n /
+                      10 ** 15
+                  ).format('0,0.0')
+                }}
+              </span>
+            </div>
+
+            <ul v-else>
+              <li class="reward__fixed mb-5 uppercase w-full text-white">
+                Fixed reward:
+              </li>
+              <li
+                class="reward__item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+              >
+                <span class="reward__label">Staking begins:</span>
+                <span v-if="farmerAcc">{{
+                  parseDate(farmerAcc.rewardA.fixedRate.beginStakingTs)
+                }}</span>
+                <span v-else>{{ '--' }}</span>
+              </li>
+              <li
+                class="reward__item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+              >
+                <span class="reward__label">Schedule begins:</span>
+                <span v-if="farmerAcc">{{
+                  parseDate(farmerAcc.rewardA.fixedRate.beginScheduleTs)
+                }}</span>
+                <span v-else>{{ '--' }}</span>
+              </li>
+              <li
+                class="reward__item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+              >
+                <span class="reward__label">Last updated:</span>
+                <span v-if="farmerAcc">{{
+                  parseDate(farmerAcc.rewardA.fixedRate.lastUpdatedTs)
+                }}</span>
+                <span v-else>{{ '--' }}</span>
+              </li>
+              <li
+                class="reward__item flex flex-row justify-between md:justify-start md:gap-4 mb-5 pb-5"
+              >
+                <span class="reward__label">Promised duration:</span>
+                <span v-if="farmerAcc">{{
+                  farmerAcc.rewardA.fixedRate.promisedDuration
+                }}</span>
+                <span v-else>{{ '--' }}</span>
+              </li>
+              <li class="mb-5">Promised schedule:</li>
+              <li>
+                <FixedScheduleDisplay
+                  :key="farmAcc?.rewardA"
+                  class="ml-5"
+                  :schedule="farmerAcc?.rewardA.fixedRate.promisedSchedule"
+                />
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <RefreshButton
+          v-if="farmerAcc"
+          :farm="farm"
+          :farmer="farmer"
+          @refresh-farmer="handleRefreshFarmer"
+        />
+      </div>
+
+      <div class="flex flex-1 mb-12 md:mb-0">
+        <div class="faq flex flex-col p-6 w-full rounded-lg">
+          <span class="text-base text-white mb-5">How to stack?</span>
+          <span class="text-base mb-4">Stacking instructions goes here</span>
+          <ol class="mb-4">
+            <li class="text-sm mb-3">Step 1</li>
+            <li class="text-sm mb-3">Step 2</li>
+            <li class="text-sm mb-3">Step 3</li>
+            <li class="text-sm">Step 4</li>
+          </ol>
+          <iframe
+            title="Inline Frame Example"
+            allowFullScreen
+            height="240"
+            src="https://www.youtube.com/embed/7B9krM5zQCw"
+          >
+          </iframe>
+        </div>
+      </div>
     </div>
-    <div class="hidden md:flex flex-1"><div class=""></div></div>
   </main>
 
-  <footer class="footer py-8">
-    <div v-if="farmerAcc" class="container mx-auto">
-      <div class="flex flex-row gap-4">
-        <button
-          v-if="farmerState === 'staked' && selectedNFTs.length > 0"
-          class="is-primary w-6/12 rounded max-w-xs py-4 text-base font-medium btnHeight"
-          @click="addGems"
-        >
-          Add Gems (resets staking)
-        </button>
-        <button
-          v-if="farmerState === 'unstaked'"
-          class="is-success w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
-          @click="beginStaking"
-        >
-          Begin staking
-        </button>
-        <button
-          v-if="farmerState === 'staked'"
-          class="is-error w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
-          @click="endStaking"
-        >
-          End staking
-        </button>
-        <button
-          v-if="farmerState === 'pendingCooldown'"
-          class="is-error w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
-          @click="endStaking"
-        >
-          End cooldown
-        </button>
-        <button
-          class="is-warning w-6/12 rounded max-w-xs py-4 text-base font-medium claim btnHeight"
-          @click="claim"
-        >
-          Claim {{ availableA }} A
-        </button>
-      </div>
-    </div>
-    <div v-else class="container mx-auto">
-      <div v-if="wallet">
-        <div class="mb-4">
-          <label class="mb-4 farmerLabel" for="farm">Enter farm address</label>
-          <input
-            id="farm"
-            class="w-full farmerInput rounded text-xs text-white btnHeight"
-            v-model="farm"
-          />
+  <footer class="footer py-8 w-full">
+    <div class="container flex md:flex-row mx-auto px-4 md:px-0 md:gap-x-20">
+      <div v-if="farmerAcc" class="md:flex-1 w-full">
+        <div class="flex flex-row gap-4">
+          <button
+            v-if="farmerState === 'staked' && selectedNFTs.length > 0"
+            class="is-primary w-6/12 rounded max-w-xs py-4 text-base font-medium btnHeight"
+            @click="addGems"
+          >
+            Add Gems (resets staking)
+          </button>
+          <button
+            v-if="farmerState === 'unstaked'"
+            class="is-success w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
+            @click="beginStaking"
+          >
+            Begin staking
+          </button>
+          <button
+            v-if="farmerState === 'staked'"
+            class="is-error w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
+            @click="endStaking"
+          >
+            End staking
+          </button>
+          <button
+            v-if="farmerState === 'pendingCooldown'"
+            class="is-error w-6/12 rounded max-w-xs py-4 text-base font-medium staking btnHeight"
+            @click="endStaking"
+          >
+            End cooldown
+          </button>
+          <button
+            class="is-warning w-6/12 rounded max-w-xs py-4 text-base font-medium claim btnHeight"
+            @click="claim"
+          >
+            Claim {{ availableA }} A
+          </button>
         </div>
+      </div>
+      <div v-else class="md:flex-1 w-full">
+        <div v-if="wallet">
+          <div class="mb-4 md:max-w-xs">
+            <label class="mb-4 farmerLabel" for="farm"
+              >Enter farm address</label
+            >
+            <input
+              id="farm"
+              class="w-full farmerInput rounded text-xs text-white btnHeight"
+              v-model="farm"
+            />
+          </div>
 
-        <button
-          class="text-base font-medium w-full text-black py-4 farmerBtn btnHeight"
-          @click="initFarmer"
-        >
-          New Farmer
-        </button>
+          <button
+            class="text-base font-medium w-full text-black py-4 farmerBtn btnHeight md:max-w-xs"
+            @click="initFarmer"
+          >
+            New Farmer
+          </button>
+        </div>
+        <div v-else>
+          <ConfigPane />
+        </div>
       </div>
-      <div v-else>
-        <ConfigPane />
-      </div>
+
+      <div class="hidden md:flex md:flex-1"></div>
     </div>
   </footer>
 </template>
@@ -421,12 +478,22 @@ export default defineComponent({
   position: sticky;
   bottom: 0;
   width: 100%;
-  border-top: 1px solid #404040;
   background-color: #000;
 }
 
 .item {
   border-bottom: 1px solid #404040;
+}
+
+@media screen and (min-width: 600px) {
+  .item__label {
+    min-width: 180px;
+  }
+
+  .reward__label {
+    color: #d0d0d0;
+    min-width: 160px;
+  }
 }
 
 .item__label {
@@ -438,7 +505,7 @@ export default defineComponent({
 }
 
 .truncate {
-  max-width: 450px;
+  max-width: 360px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -501,5 +568,11 @@ export default defineComponent({
 
 .btnHeight {
   max-height: 56px;
+}
+
+.faq {
+  border: 1px solid #1d1d1d;
+  height: max-content;
+  color: #a1a1a1;
 }
 </style>

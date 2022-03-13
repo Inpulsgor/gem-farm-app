@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="title text-sm mb-4">{{ title }}</p>
-    <div class="tokens p-2 rounded">
+    <div class="tokens p-2 rounded-lg relative">
       <slot />
       <div class="flex flex-wrap">
         <NFTCard
@@ -50,5 +50,11 @@ export default defineComponent({
       rgba(151, 150, 240, 0.04) 100%
     ),
     #191819;
+}
+
+@media (min-width: 768px) {
+  .tokens {
+    min-height: 170px;
+  }
 }
 </style>

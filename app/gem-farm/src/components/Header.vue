@@ -7,7 +7,7 @@
           href="https://www.cprodiamond.io/"
         >
           <img src="../assets/diamond.svg" height="31" width="28" />
-          <span class="text-white text-base font-medium ml-4"
+          <span class="text-white text-base md:text-xl font-medium ml-4"
             >Cprodiamonds.io</span
           >
         </a>
