@@ -3,11 +3,17 @@
     <div class="container mx-auto">
       <nav class="flex flex-row justify-center align-middle">
         <a
-          class="flex justify-center align-middle"
+          class="flex justify-center align-middle cursor-pointer normal-case"
           href="https://www.cprodiamond.io/"
         >
-          <img src="../assets/diamond.svg" height="31" width="28" />
-          <span class="text-white text-base md:text-xl font-medium ml-4"
+          <img
+            class="cursor-pointer"
+            src="../assets/diamond.svg"
+            height="31"
+            width="28"
+          />
+          <span
+            class="text-white text-base md:text-xl font-medium ml-4 cursor-pointer normal-case"
             >Cprodiamonds.io</span
           >
         </a>

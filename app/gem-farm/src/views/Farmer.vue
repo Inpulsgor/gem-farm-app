@@ -194,8 +194,14 @@
     </div>
   </main>
 
-  <footer class="footer py-8 w-full">
-    <div class="container flex md:flex-row mx-auto px-4 md:px-0">
+  <footer
+    :class="`${scrolledToBottom ? 'footer' : 'footerSticky'} pb-8 w-full`"
+  >
+    <div
+      :class="`${
+        scrolledToBottom && 'bordered'
+      } container flex md:flex-row mx-auto px-4 md:px-0 pt-8`"
+    >
       <div v-if="farmerAcc" class="md:flex-1 w-full">
         <div class="flex flex-row gap-4">
           <button
@@ -280,6 +286,32 @@ import numeral from 'numeral';
 
 export default defineComponent({
   components: { Vault, FarmerRewardDisplay, RefreshButton, ConfigPane, Footer },
+  data() {
+    return { scrolledToBottom: false };
+  },
+  methods: {
+    scroll() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          Math.max(
+            window.pageYOffset,
+            document.documentElement.scrollTop,
+            document.body.scrollTop
+          ) +
+            window.innerHeight ===
+          document.documentElement.offsetHeight;
+
+        if (bottomOfWindow) {
+          this.scrolledToBottom = true; // replace it with your code
+        } else {
+          this.scrolledToBottom = false;
+        }
+      };
+    },
+  },
+  mounted() {
+    this.scroll();
+  },
   setup() {
     const { wallet, getWallet, isConnected } = useWallet();
     const { cluster, getConnection } = useCluster();
@@ -477,10 +509,20 @@ export default defineComponent({
 
 <style scoped>
 .footer {
+  position: static;
+  width: 100%;
+  background-color: transparent;
+}
+
+.footerSticky {
   position: sticky;
   bottom: 0;
   width: 100%;
   background-color: #000;
+}
+
+.bordered {
+  border-top: 1px solid #404040;
 }
 
 .item {
