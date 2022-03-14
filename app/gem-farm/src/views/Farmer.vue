@@ -3,7 +3,7 @@
     <div
       class="container mx-auto pt-8 pb-9 px-4 md:px-0 flex flex-col-reverse md:flex-row md:gap-x-20"
     >
-      <div class="flex-1">
+      <div class="w-full md:w-1/2">
         <section v-if="farmerAcc">
           <Vault
             :key="farmerAcc"
@@ -172,7 +172,7 @@
         />
       </div>
 
-      <div class="flex flex-1 mb-12 md:mb-0">
+      <div class="flex w-full md:w-1/2 mb-12 md:mb-0">
         <div class="faq flex flex-col p-6 w-full rounded-lg">
           <span class="text-base text-white mb-5">How to stack?</span>
           <span class="text-base mb-4">Stacking instructions goes here</span>
@@ -183,9 +183,9 @@
             <li class="text-sm">Step 4</li>
           </ol>
           <iframe
+            class="videoFrame"
             title="Inline Frame Example"
             allowFullScreen
-            height="240"
             src="https://www.youtube.com/embed/7B9krM5zQCw"
           >
           </iframe>
@@ -195,7 +195,7 @@
   </main>
 
   <footer class="footer py-8 w-full">
-    <div class="container flex md:flex-row mx-auto px-4 md:px-0 md:gap-x-20">
+    <div class="container flex md:flex-row mx-auto px-4 md:px-0">
       <div v-if="farmerAcc" class="md:flex-1 w-full">
         <div class="flex flex-row gap-4">
           <button
@@ -235,8 +235,8 @@
         </div>
       </div>
       <div v-else class="md:flex-1 w-full">
-        <div v-if="wallet">
-          <div class="mb-4 md:max-w-xs">
+        <div v-if="wallet" class="md:flex">
+          <div class="mb-4 md:max-w-sm w-full">
             <label class="mb-4 farmerLabel" for="farm"
               >Enter farm address</label
             >
@@ -248,7 +248,7 @@
           </div>
 
           <button
-            class="text-base font-medium w-full text-black py-4 farmerBtn btnHeight md:max-w-xs"
+            class="text-base font-medium w-full text-black py-4 farmerBtn btnHeight md:max-w-xs md:mt-10 md:ml-4"
             @click="initFarmer"
           >
             New Farmer
@@ -258,8 +258,6 @@
           <ConfigPane />
         </div>
       </div>
-
-      <div class="hidden md:flex md:flex-1"></div>
     </div>
   </footer>
 </template>
@@ -288,6 +286,10 @@ export default defineComponent({
 
     let gf: any;
     watch([wallet, cluster], async () => {
+      if (cluster.value === 'mainnet') {
+        farm.value = '8EV1K3kWmq2hbRtQfnBg3wbvELEorJajbyJhRGwVptwj';
+      }
+
       await freshStart();
     });
 
@@ -485,7 +487,7 @@ export default defineComponent({
   border-bottom: 1px solid #404040;
 }
 
-@media screen and (min-width: 600px) {
+@media (min-width: 600px) {
   .item__label {
     min-width: 180px;
   }
@@ -574,5 +576,15 @@ export default defineComponent({
   border: 1px solid #1d1d1d;
   height: max-content;
   color: #a1a1a1;
+}
+
+.videoFrame {
+  min-height: 186px;
+}
+
+@media (min-width: 768px) {
+  .videoFrame {
+    min-height: 286px;
+  }
 }
 </style>

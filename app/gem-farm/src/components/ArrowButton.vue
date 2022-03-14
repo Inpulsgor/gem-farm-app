@@ -1,8 +1,8 @@
 <template>
-  <button :disabled="disabled">
+  <button class="btn" :disabled="disabled">
     <img
       src="../assets/right.svg"
-      alt="right"
+      :alt="left ? 'left' : 'right'"
       :width="16"
       :height="32"
       :class="{ left: left, disabled: disabled }"
@@ -20,6 +20,7 @@ export default defineComponent({
   setup() {
     return {};
   },
+  mounted() {},
 });
 </script>
 
@@ -32,7 +33,12 @@ img {
 .left {
   transform: scaleX(-1);
 }
+
 .disabled {
-  opacity: 0;
+  opacity: 0.1;
+}
+
+.btn:hover {
+  cursor: pointer;
 }
 </style>

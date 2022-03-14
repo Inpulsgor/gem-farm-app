@@ -8,10 +8,10 @@
     class="mb-10 flex justify-center"
   >
     <button
-      class="block w-full text-base text-white refresh rounded py-4 btnHeight md:max-w-xs md:m-auto mr-5"
+      class="block w-full text-base text-white refresh rounded py-4 btnHeight md:max-w-xs md:m-auto"
       @click="moveNFTsOnChain"
     >
-      Move NFTs to Vault
+      Move NFTs
     </button>
     <slot />
   </div>
@@ -27,15 +27,17 @@
     />
 
     <!--mid-->
-    <div class="flex flex-col px-5 mt-9 md:mt-0 justify-center">
+    <div
+      class="flex flex-col md:flex-row px-5 md:px-0 md:py-4 md:gap-4 mt-9 md:mt-0 justify-center"
+    >
       <ArrowButton
         :disabled="vaultLocked"
-        class="my-2"
+        class="my-2 md:my-0"
         @click="moveNFTsFE(false)"
       />
       <ArrowButton
         :disabled="vaultLocked"
-        class="my-2"
+        class="my-2 md:my-0"
         :left="true"
         @click="moveNFTsFE(true)"
       />
@@ -319,7 +321,6 @@ export default defineComponent({
 .btnHeight {
   max-height: 56px;
   color: #141414;
-  background: linear-gradient(192.54deg, #9be15d 2.01%, #00e3ae 97.9%),
-    linear-gradient(90deg, #fbc7d4 0%, #9796f0 100%), #4aaf47;
+  background: linear-gradient(90deg, #fbc7d4 0%, #9796f0 100%), #4aaf47;
 }
 </style>
