@@ -11,7 +11,9 @@
       class="block w-full text-base text-white refresh rounded py-4 btnHeight md:max-w-xs md:m-auto"
       @click="moveNFTsOnChain"
     >
-      Move NFTs
+      <span v-if="toVaultNFTs.length > 0">Move NFTs to Vault</span>
+      <span v-else-if="toWalletNFTs.length > 0">Move NFTs to Wallet</span>
+      <span v-else>Move NFTs</span>
     </button>
     <slot />
   </div>
@@ -232,7 +234,7 @@ export default defineComponent({
           desiredVaultNFTs.value,
           currentVaultNFTs.value
         );
-        console.log('to vault nfts are', toVaultNFTs.value);
+        console.log('to vault nfts are', toVaultNFTs.value.length);
       },
       { deep: true }
     );
@@ -245,7 +247,7 @@ export default defineComponent({
           desiredWalletNFTs.value,
           currentWalletNFTs.value
         );
-        console.log('to wallet nfts are', toWalletNFTs.value);
+        console.log('to wallet nfts are', toWalletNFTs.value.length);
       },
       { deep: true }
     );

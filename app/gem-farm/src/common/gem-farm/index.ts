@@ -13,6 +13,7 @@ import {
   GEM_BANK_PROG_ID,
 } from '@gemworks/gem-farm-ts';
 import { programs } from '@metaplex/js';
+import * as Toastr from 'toastr';
 
 export async function initGemFarm(
   conn: Connection,
@@ -238,7 +239,8 @@ export class GemFarm extends GemFarmClient {
       this.wallet.publicKey
     );
 
-    console.log('initialized new farmer', this.wallet.publicKey.toBase58());
+    Toastr.info('initialized new farmer', this.wallet.publicKey.toBase58());
+    // console.log('initialized new farmer', this.wallet.publicKey.toBase58());
 
     return result;
   }
@@ -318,7 +320,8 @@ export class GemFarm extends GemFarmClient {
       whitelistType
     );
 
-    console.log(`${addressToWhitelist.toBase58()} added to whitelist`);
+    Toastr.info(`${addressToWhitelist.toBase58()} added to whitelist`);
+    // console.log(`${addressToWhitelist.toBase58()} added to whitelist`);
 
     return result;
   }
@@ -333,7 +336,8 @@ export class GemFarm extends GemFarmClient {
       addressToRemove
     );
 
-    console.log(`${addressToRemove.toBase58()} removed from whitelist`);
+    Toastr.info(`${addressToRemove.toBase58()} removed from whitelist`);
+    // console.log(`${addressToRemove.toBase58()} removed from whitelist`);
 
     return result;
   }

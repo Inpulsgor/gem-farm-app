@@ -1,6 +1,7 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import axios from 'axios';
+import * as Toastr from 'toastr';
 import { programs } from '@metaplex/js';
 
 const {
@@ -68,7 +69,9 @@ export async function getNFTsByOwner(
   conn: Connection
 ): Promise<INFT[]> {
   const tokens = await getTokensByOwner(owner, conn);
-  console.log(`found ${tokens.length} tokens`);
+
+  Toastr.success(`found ${tokens.length} tokens`);
+  // console.log(`found ${tokens.length} tokens`);
 
   return await getNFTMetadataForMany(tokens, conn);
 }

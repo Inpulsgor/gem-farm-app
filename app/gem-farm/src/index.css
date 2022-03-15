@@ -7,7 +7,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
-	cursor: default;
+	cursor: auto;
 }
 
 body {
@@ -16,4 +16,8 @@ body {
 
 #app {
 	min-height: 100%;
+}
+
+a:hover {
+	text-decoration: none;
 }

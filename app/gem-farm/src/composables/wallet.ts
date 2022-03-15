@@ -10,6 +10,7 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import { PublicKey } from '@solana/web3.js';
 import { SignerWalletAdapter } from '@solana/wallet-adapter-base';
+import * as Toastr from 'toastr';
 
 const walletClass = ref<Wallet | null>(null);
 const walletAdapter = ref<Ref<SignerWalletAdapter | null>>(shallowRef(null));
@@ -50,14 +51,17 @@ export default function useWallet() {
         // only set the two if the call succeeds
         walletClass.value = gottenWallet;
         walletAdapter.value = connectedAdapter;
-        console.log(
-          'wallet successfully connected',
-          newWallet,
-          network.substr(0, 20)
-        );
+
+        Toastr.success('wallet successfully connected');
+        // console.log(
+        //   'wallet successfully connected',
+        //   newWallet,
+        //   network.substr(0, 20)
+        // );
       })
       .catch(() => {
-        console.log('oh no, failed to connect to wallet, try again');
+        Toastr.error('oh no, failed to connect to wallet, try again');
+        // console.log('oh no, failed to connect to wallet, try again');
         walletClass.value = null;
         walletAdapter.value = null;
       });

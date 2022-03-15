@@ -176,12 +176,57 @@
         <div class="faq flex flex-col p-6 w-full rounded-lg">
           <span class="text-base text-white mb-5">How to stack?</span>
           <span class="text-base mb-4">Stacking instructions goes here</span>
-          <ol class="mb-4">
-            <li class="text-sm mb-3">Step 1</li>
-            <li class="text-sm mb-3">Step 2</li>
-            <li class="text-sm mb-3">Step 3</li>
-            <li class="text-sm">Step 4</li>
-          </ol>
+          <ul class="mb-4">
+            <li class="text-sm mb-3">
+              1. Make sure you are using the wallet which contains your DH NFT.
+            </li>
+            <li class="text-sm mb-3">
+              2. Open your browser and go to the staking link
+            </li>
+            <li class="text-sm mb-3">
+              3. In the bar at bottom please select the wallet you are using and
+              connect
+            </li>
+            <li class="text-sm mb-3">
+              4. In the address bar please input
+              8EV1K3kWmq2hbRtQfnBg3wbvELEorJajbyJhRGwVptwj and click the new
+              farmer button
+            </li>
+            <li class="text-sm mb-3">
+              5. This will allow you to start staking
+            </li>
+            <li class="text-sm mb-3">
+              6. Once the transaction goes through - the page will autopopulate
+            </li>
+            <li class="text-sm mb-3">
+              7. Select you DH NFT by clicking on it and move it to the vault by
+              clicking the arrow
+            </li>
+            <li class="text-sm mb-3">
+              8. Click the green 'Move to Vault' button that has appeared and
+              approve the transaction
+            </li>
+            <li class="text-sm mb-3">
+              9. Once the NFT has moved to the vault select it and now click the
+              begin staking button
+            </li>
+            <li class="text-sm mb-3">
+              10. You will see your status update change to say 'staked'
+            </li>
+            <li class="text-sm mb-3">
+              11. All done! Come back later and follow the process above - and
+              then scroll down and click the Refresh account button to see how
+              many tokens you've received!
+            </li>
+            <li class="text-sm mb-3">
+              12. Once you've refreshed the account you'll see the claim token
+              button update with the number of tokens you can claim
+            </li>
+            <li class="text-sm">
+              13. Go ahead and claim those tokens! Make sure to come back to
+              claim your rewards weekly
+            </li>
+          </ul>
           <iframe
             class="videoFrame"
             title="Inline Frame Example"
@@ -282,6 +327,7 @@ import RefreshButton from '@/components/RefreshButton.vue';
 import Footer from '@/components/Footer.vue';
 import FarmerRewardDisplay from '@/components/gem-farm/FarmerRewardDisplay.vue';
 import Vault from '@/components/gem-bank/Vault.vue';
+import * as Toastr from 'toastr';
 import numeral from 'numeral';
 
 export default defineComponent({
@@ -302,7 +348,7 @@ export default defineComponent({
           document.documentElement.offsetHeight;
 
         if (bottomOfWindow) {
-          this.scrolledToBottom = true; // replace it with your code
+          this.scrolledToBottom = true;
         } else {
           this.scrolledToBottom = false;
         }
@@ -357,10 +403,14 @@ export default defineComponent({
 
     const fetchFarn = async () => {
       farmAcc.value = await gf.fetchFarmAcc(new PublicKey(farm.value!));
-      console.log(
+      Toastr.info(
         `farm found at ${farm.value}:`,
         stringifyPKsAndBNs(farmAcc.value)
       );
+      // console.log(
+      //   `farm found at ${farm.value}:`,
+      //   stringifyPKsAndBNs(farmAcc.value)
+      // );
     };
 
     const fetchFarmer = async () => {
