@@ -172,13 +172,14 @@
         />
       </div>
 
-      <div class="flex w-full md:w-1/2 mb-12 md:mb-0">
+      <div class="hidden md:flex w-full md:w-1/2 mb-12 md:mb-0">
         <div class="faq flex flex-col p-6 w-full rounded-lg">
           <span class="text-base text-white mb-5">How to stack?</span>
           <span class="text-base mb-4">Stacking instructions goes here</span>
+
           <ul class="mb-4">
             <li class="text-sm mb-3">
-              1. Make sure you are using the wallet which contains your DH NFT.
+              1. Make sure you are using the wallet which contains your DH NFT
             </li>
             <li class="text-sm mb-3">
               2. Open your browser and go to the staking link
@@ -187,7 +188,76 @@
               3. In the bar at bottom please select the wallet you are using and
               connect
             </li>
+            <li class="text-sm mb-3 walletOverflow">
+              4. In the address bar please input
+              8EV1K3kWmq2hbRtQfnBg3wbvELEorJajbyJhRGwVptwj and click the new
+              farmer button
+            </li>
             <li class="text-sm mb-3">
+              5. This will allow you to start staking
+            </li>
+            <li class="text-sm mb-3">
+              6. Once the transaction goes through - the page will autopopulate
+            </li>
+            <li class="text-sm mb-3">
+              7. Select you DH NFT by clicking on it and move it to the vault by
+              clicking the arrow
+            </li>
+            <li class="text-sm mb-3">
+              8. Click the green 'Move to Vault' button that has appeared and
+              approve the transaction
+            </li>
+            <li class="text-sm mb-3">
+              9. Once the NFT has moved to the vault select it and now click the
+              begin staking button
+            </li>
+            <li class="text-sm mb-3">
+              10. You will see your status update change to say 'staked'
+            </li>
+            <li class="text-sm mb-3">
+              11. All done! Come back later and follow the process above - and
+              then scroll down and click the Refresh account button to see how
+              many tokens you've received!
+            </li>
+            <li class="text-sm mb-3">
+              12. Once you've refreshed the account you'll see the claim token
+              button update with the number of tokens you can claim
+            </li>
+            <li class="text-sm">
+              13. Go ahead and claim those tokens! Make sure to come back to
+              claim your rewards weekly
+            </li>
+          </ul>
+          <iframe
+            class="videoFrame"
+            title="Inline Frame Example"
+            allowFullScreen
+            src="https://www.youtube.com/embed/7B9krM5zQCw"
+          >
+          </iframe>
+        </div>
+      </div>
+
+      <div class="w-full md:hidden">
+        <input type="checkbox" name="panel" id="panel-1" class="hidden" />
+        <label for="panel-1" class="relative block text-white p-4 border-grey"
+          >How to stack?</label
+        >
+        <div class="accordion__content overflow-hidden bg-grey-lighter">
+          <span class="text-base mb-4">Stacking instructions goes here</span>
+
+          <ul class="mb-4">
+            <li class="text-sm mb-3">
+              1. Make sure you are using the wallet which contains your DH NFT
+            </li>
+            <li class="text-sm mb-3">
+              2. Open your browser and go to the staking link
+            </li>
+            <li class="text-sm mb-3">
+              3. In the bar at bottom please select the wallet you are using and
+              connect
+            </li>
+            <li class="text-sm mb-3 walletOverflow">
               4. In the address bar please input
               8EV1K3kWmq2hbRtQfnBg3wbvELEorJajbyJhRGwVptwj and click the new
               farmer button
@@ -674,9 +744,34 @@ export default defineComponent({
   min-height: 186px;
 }
 
+.walletOverflow {
+  overflow-wrap: anywhere;
+}
+
 @media (min-width: 768px) {
   .videoFrame {
     min-height: 286px;
   }
+}
+
+label:after {
+  content: '+';
+  position: absolute;
+  right: 1em;
+  color: #fff;
+}
+
+input:checked + label:after {
+  content: '-';
+  line-height: 0.8em;
+}
+
+.accordion__content {
+  max-height: 0em;
+  transition: all 0.4s cubic-bezier(0.865, 0.14, 0.095, 0.87);
+}
+input[name='panel']:checked ~ .accordion__content {
+  /* Get this as close to what height you expect */
+  max-height: 50em;
 }
 </style>

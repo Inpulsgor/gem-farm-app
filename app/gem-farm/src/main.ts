@@ -5,10 +5,10 @@ import App from './App.vue';
 import router from './router';
 import './index.css';
 
-// Toastr.options.closeButton = true;
 Toastr.options.timeOut = 3000;
 Toastr.options.showDuration = 1000;
 Toastr.options.extendedTimeOut = 3000;
 Toastr.options.positionClass = 'toast-top-right';
+Toastr.options.preventDuplicates = true;
 
 createApp(App).use(router).mount('#app');

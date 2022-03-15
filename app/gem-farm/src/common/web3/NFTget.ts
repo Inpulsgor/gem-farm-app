@@ -70,7 +70,9 @@ export async function getNFTsByOwner(
 ): Promise<INFT[]> {
   const tokens = await getTokensByOwner(owner, conn);
 
-  Toastr.success(`found ${tokens.length} tokens`);
+  Toastr.success(
+    `found ${tokens.length} ${tokens.length === 1 ? 'token' : 'tokens'} `
+  );
   // console.log(`found ${tokens.length} tokens`);
 
   return await getNFTMetadataForMany(tokens, conn);
