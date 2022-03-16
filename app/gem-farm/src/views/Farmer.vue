@@ -152,12 +152,13 @@
                 }}</span>
                 <span v-else>{{ '--' }}</span>
               </li>
-              <li class="mb-5">Promised schedule:</li>
-              <li>
+              <li class="mb-5">
+                <span class="reward__label">Promised schedule:</span>
+              </li>
+              <li v-if="farmerAcc">
                 <FixedScheduleDisplay
                   :key="farmAcc?.rewardA"
-                  class="ml-5"
-                  :schedule="farmerAcc?.rewardA.fixedRate.promisedSchedule"
+                  :schedule="farmerAcc.rewardA.fixedRate.promisedSchedule"
                 />
               </li>
             </ul>
@@ -239,7 +240,9 @@
 
       <div class="w-full md:hidden mb-6 accord rounded-lg">
         <input type="checkbox" name="panel" id="panel-1" class="hidden" />
-        <label for="panel-1" class="relative block text-base text-white p-4 m-0"
+        <label
+          for="panel-1"
+          class="accord__label relative block text-base text-white p-4 m-0"
           >How to stack?</label
         >
 
@@ -396,13 +399,19 @@ import useCluster from '@/composables/cluster';
 import ConfigPane from '@/components/ConfigPane.vue';
 import RefreshButton from '@/components/RefreshButton.vue';
 import Footer from '@/components/Footer.vue';
-import FarmerRewardDisplay from '@/components/gem-farm/FarmerRewardDisplay.vue';
+import FixedScheduleDisplay from '@/components/gem-farm/FixedScheduleDisplay.vue';
 import Vault from '@/components/gem-bank/Vault.vue';
 import * as Toastr from 'toastr';
 import numeral from 'numeral';
 
 export default defineComponent({
-  components: { Vault, FarmerRewardDisplay, RefreshButton, ConfigPane, Footer },
+  components: {
+    Vault,
+    FixedScheduleDisplay,
+    RefreshButton,
+    ConfigPane,
+    Footer,
+  },
   data() {
     return { scrolledToBottom: false };
   },
@@ -760,14 +769,14 @@ export default defineComponent({
   }
 }
 
-label:after {
+.accord__label:after {
   content: '+';
   position: absolute;
   right: 1em;
   color: #fff;
 }
 
-input:checked + label:after {
+input:checked + .accord__label:after {
   content: '-';
   line-height: 0.8em;
 }

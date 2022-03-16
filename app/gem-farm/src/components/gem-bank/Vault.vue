@@ -78,6 +78,7 @@ import { initGemBank } from '@/common/gem-bank';
 import { PublicKey } from '@solana/web3.js';
 import { getListDiffBasedOnMints, removeManyFromList } from '@/common/util';
 import { BN } from '@project-serum/anchor';
+import * as Toastr from 'toastr';
 
 export default defineComponent({
   components: { ArrowButton, NFTGrid },
@@ -234,7 +235,7 @@ export default defineComponent({
           desiredVaultNFTs.value,
           currentVaultNFTs.value
         );
-        console.log('to vault nfts are', toVaultNFTs.value.length);
+        console.log('to vault nfts are', toVaultNFTs.value);
       },
       { deep: true }
     );
@@ -247,7 +248,7 @@ export default defineComponent({
           desiredWalletNFTs.value,
           currentWalletNFTs.value
         );
-        console.log('to wallet nfts are', toWalletNFTs.value.length);
+        console.log('to wallet nfts are', toWalletNFTs.value);
       },
       { deep: true }
     );
