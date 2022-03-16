@@ -2,7 +2,7 @@
   <ul class="pl-8">
     <li class="flex flex-row justify-between md:justify-start md:gap-4 mb-5">
       <span class="reward__label">Base rate:</span>
-      <span>{{ schedule.baseRate }} Diamond/NFT/s</span>
+      <span>{{ schedule.baseRate / schedule.denominator }} Diamond/NFT/s</span>
     </li>
     <li
       class="flex flex-row justify-between md:justify-start md:gap-4 mb-5"

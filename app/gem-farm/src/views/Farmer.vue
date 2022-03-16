@@ -355,7 +355,7 @@
             class="is-warning w-6/12 rounded max-w-xs py-4 text-base font-medium claim btnHeight"
             @click="claim"
           >
-            Claim {{ availableA }} A
+            Claim {{ availableA }} Diamonds
           </button>
         </div>
       </div>
