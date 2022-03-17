@@ -34,3 +34,22 @@ export function parseDate(unixTsSec: number | string | BN) {
   const dateObj = new Date(unixBN.mul(new BN(1000)).toNumber());
   return moment(dateObj).format('MMM Do YY, h:mm a');
 }
+
+export const convertMsToTime = (milliseconds: number) => {
+  if (!milliseconds) return;
+
+  let seconds = Math.floor(milliseconds / 1000);
+  let minutes = Math.floor(seconds / 60);
+  let hours = Math.floor(minutes / 60);
+
+  seconds %= 60;
+  minutes %= 60;
+  hours %= 24;
+  const padTo2Digits = (num: number) => {
+    return num.toString().padStart(2, '0');
+  };
+
+  return `${padTo2Digits(hours)} hours ${padTo2Digits(
+    minutes
+  )} minutes ${padTo2Digits(seconds)} seconds`;
+};

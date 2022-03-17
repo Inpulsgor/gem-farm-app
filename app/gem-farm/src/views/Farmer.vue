@@ -148,7 +148,7 @@
               >
                 <span class="reward__label">Promised duration:</span>
                 <span v-if="farmerAcc">{{
-                  farmerAcc.rewardA.fixedRate.promisedDuration
+                  convertMsToTime(farmerAcc.rewardA.fixedRate.promisedDuration)
                 }}</span>
                 <span v-else>{{ '--' }}</span>
               </li>
@@ -392,7 +392,7 @@ import { defineComponent, nextTick, onMounted, ref, watch } from 'vue';
 import { findFarmerPDA, stringifyPKsAndBNs } from '@gemworks/gem-farm-ts';
 import { PublicKey } from '@solana/web3.js';
 import { initGemFarm } from '@/common/gem-farm';
-import { parseDate } from '@/common/util';
+import { parseDate, convertMsToTime } from '@/common/util';
 import { INFT } from '@/common/web3/NFTget';
 import useWallet from '@/composables/wallet';
 import useCluster from '@/composables/cluster';
@@ -630,6 +630,7 @@ export default defineComponent({
       parseDate,
       parseRewardType,
       numeral,
+      convertMsToTime,
     };
   },
 });
