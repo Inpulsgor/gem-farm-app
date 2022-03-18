@@ -8,10 +8,10 @@
         id="cluster"
         v-model="chosenCluster"
       >
-        <option :value="Cluster.Mainnet">Mainnet</option>
-        <option :value="Cluster.Devnet">Devnet</option>
-        <option :value="Cluster.Testnet">Testnet</option>
-        <option :value="Cluster.Localnet">Localnet</option>
+        <option class="option" :value="Cluster.Mainnet">Mainnet</option>
+        <option class="option" :value="Cluster.Devnet">Devnet</option>
+        <option class="option" :value="Cluster.Testnet">Testnet</option>
+        <option class="option" :value="Cluster.Localnet">Localnet</option>
       </select>
     </div>
     <div class="w-full md:max-w-xs">
@@ -22,12 +22,12 @@
         id="wallet"
         v-model="chosenWallet"
       >
-        <option class="text-gray-500" :value="null">Choose wallet..</option>
-        <option :value="WalletName.Phantom">Phantom</option>
-        <option :value="WalletName.Sollet">Sollet</option>
-        <option :value="WalletName.SolletExtension">Sollet Extension</option>
-        <option :value="WalletName.Solflare">Solflare</option>
-        <option :value="WalletName.SolflareWeb">Solflare Web</option>
+        <option class="option text-gray-500" :value="null">Choose wallet..</option>
+        <option class="option" :value="WalletName.Phantom">Phantom</option>
+        <option class="option" :value="WalletName.Sollet">Sollet</option>
+        <option class="option" :value="WalletName.SolletExtension">Sollet Extension</option>
+        <option class="option" :value="WalletName.Solflare">Solflare</option>
+        <option class="option" :value="WalletName.SolflareWeb">Solflare Web</option>
       </select>
     </div>
   </div>
@@ -97,6 +97,10 @@ export default defineComponent({
 .select::after {
   content: '';
   padding-right: 20px;
+}
+
+.option {
+  background-color: #141414;
 }
 
 .btnHeight {
